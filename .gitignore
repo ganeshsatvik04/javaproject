@@ -1,0 +1,29 @@
+# Build targets
+target/
+dist/
+build/
+
+# Node dependencies
+node_modules/
+.pnpm-store/
+
+# Local databases & logs
+*.log
+careermatch.db-journal
+careermatch.db-wal
+careermatch.db-shm
+
+# IDE & Editor files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Temporary zip files
+bolt_frontend.zip
