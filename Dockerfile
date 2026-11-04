@@ -19,7 +19,7 @@ COPY CareerMatch_Backend/src ./src
 
 # Inject built frontend assets into Javalin public classpath
 RUN mkdir -p ./src/main/resources/public
-COPY --from=frontend-build /frontend/dist/ ./src/main/resources/public/
+COPY --from=frontend-build /frontend/dist ./src/main/resources/public
 
 RUN mvn clean package -DskipTests
 
