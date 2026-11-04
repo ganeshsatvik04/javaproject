@@ -6,17 +6,26 @@ const API_BASE = import.meta.env.VITE_API_URL || '';
 
 export async function apiFetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = `${API_BASE}${endpoint}`;
-  const response = await fetch(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...options.headers,
-    },
-    ...options,
-  });
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+      ...options,
+    });
+  } catch (err: any) {
+    throw new Error(
+      err?.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError'))
+        ? 'Cannot connect to authentication server. Please ensure the backend is running.'
+        : err?.message || 'Network connection failed'
+    );
+  }
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));
-    throw new Error(errorBody.error || `Request failed with status ${response.status}`);
+    throw new Error(errorBody.error || `Authentication failed (status ${response.status})`);
   }
 
   return response.json();
