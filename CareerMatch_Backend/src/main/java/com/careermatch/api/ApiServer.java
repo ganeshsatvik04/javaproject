@@ -59,11 +59,13 @@ public class ApiServer {
             } catch (Exception ignored) {}
         }).start(port);
 
-        // SPA fallback: serve index.html for all non-API GET requests
-        // so React client-side navigation works on page refresh or direct URL access.
+        // SPA fallback: for any non-API, non-asset GET request serve index.html
+        // so React client-side navigation works on hard refresh or direct URL entry.
         app.get("/*", ctx -> {
             String path = ctx.path();
-            if (!path.startsWith("/api")) {
+            // Skip: API routes and static assets (js, css, images, fonts, etc.)
+            boolean isAsset = path.contains(".") && !path.endsWith(".html");
+            if (!path.startsWith("/api") && !isAsset) {
                 try {
                     java.io.InputStream indexStream = ApiServer.class
                             .getResourceAsStream("/public/index.html");

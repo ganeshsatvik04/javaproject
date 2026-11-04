@@ -3,11 +3,13 @@
 # =============================================================
 FROM node:20-alpine AS frontend-build
 WORKDIR /frontend
-ENV NODE_ENV=development
+# Install deps first (layer cache), then copy source and build for production
 COPY frontend/package*.json ./
 RUN npm install
 COPY frontend/ ./
 RUN npm run build
+# Verify build output exists
+RUN test -f dist/index.html || (echo 'Frontend build failed: dist/index.html missing' && exit 1)
 
 # =============================================================
 # Stage 2: Build the Java Backend with Embedded Frontend Assets
