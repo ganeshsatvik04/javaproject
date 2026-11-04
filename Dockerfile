@@ -3,6 +3,7 @@
 # =============================================================
 FROM node:20-alpine AS frontend-build
 WORKDIR /frontend
+ENV NODE_ENV=development
 COPY frontend/package*.json ./
 RUN npm install
 COPY frontend/ ./
