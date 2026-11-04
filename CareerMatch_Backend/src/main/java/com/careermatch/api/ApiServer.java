@@ -56,40 +56,9 @@ public class ApiServer {
                     staticFiles.location = Location.CLASSPATH;
                     staticFiles.precompress = false;
                 });
+                config.spaRoot.addFile("/", "/public/index.html", Location.CLASSPATH);
             } catch (Exception ignored) {}
         }).start(port);
-
-        // Serve all frontend assets from classpath /public with correct MIME types.
-        // Falls back to index.html for clean SPA URLs (no extension)  so
-        // React client-side navigation works on hard refresh / direct URL entry.
-        app.get("/*", ctx -> {
-            String path = ctx.path();
-            if (path.startsWith("/api")) return; // let API route handlers take over
-
-            // Try to serve the exact file from the bundled /public directory
-            java.io.InputStream stream = ApiServer.class.getResourceAsStream("/public" + path);
-            if (stream != null) {
-                String mime;
-                if      (path.endsWith(".js"))   mime = "application/javascript";
-                else if (path.endsWith(".css"))  mime = "text/css";
-                else if (path.endsWith(".json")) mime = "application/json";
-                else if (path.endsWith(".svg"))  mime = "image/svg+xml";
-                else if (path.endsWith(".png"))  mime = "image/png";
-                else if (path.endsWith(".ico"))  mime = "image/x-icon";
-                else if (path.endsWith(".woff2")) mime = "font/woff2";
-                else if (path.endsWith(".woff")) mime = "font/woff";
-                else if (path.endsWith(".html")) mime = "text/html;charset=utf-8";
-                else                              mime = "application/octet-stream";
-                ctx.contentType(mime).result(stream);
-            } else {
-                // No matching file: serve index.html so React Router handles the path
-                java.io.InputStream indexStream =
-                        ApiServer.class.getResourceAsStream("/public/index.html");
-                if (indexStream != null) {
-                    ctx.contentType("text/html;charset=utf-8").result(indexStream);
-                }
-            }
-        });
 
         // System Health Check
         app.get("/api/health", ctx -> {
