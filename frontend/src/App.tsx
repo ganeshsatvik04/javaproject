@@ -112,7 +112,6 @@ function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [showSkillDialog, setShowSkillDialog] = useState(false);
-  const [showTeamModal, setShowTeamModal] = useState(false);
   const [skills, setSkills] = useState<Skill[]>(initialSkills);
   const [search, setSearch] = useState('');
   const [savedJobs, setSavedJobs] = useState<string[]>([]);
@@ -206,14 +205,14 @@ function App() {
             <Settings size={18} />
             <span>Settings</span>
           </button>
-          <div className="upgrade-card" style={{ cursor: 'pointer', border: '1px solid #c7d2fe', background: '#f5f3ff' }} onClick={() => setShowTeamModal(true)}>
-            <div className="upgrade-icon" style={{ background: '#e0e7ff', color: '#4338ca' }}>
-              <UsersRound size={17} />
+          <div className="upgrade-card">
+            <div className="upgrade-icon">
+              <Zap size={17} />
             </div>
-            <strong style={{ color: '#312e81' }}>SRM University - AP</strong>
-            <p style={{ margin: '3px 0 6px', fontSize: '11px', color: '#6366f1' }}>Guide: Dr. Trithankar Sengupta</p>
-            <button type="button" style={{ color: '#4338ca', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
-              Project Team ({6}) <ArrowUpRight size={13} />
+            <strong>Unlock your potential</strong>
+            <p>Get tailored insights with Pro.</p>
+            <button>
+              Explore Pro <ArrowUpRight size={14} />
             </button>
           </div>
           <div className="sidebar-user">
@@ -310,54 +309,6 @@ function App() {
             setShowSkillDialog(false);
           }}
         />
-      )}
-
-      {showTeamModal && (
-        <div className="dialog-backdrop" onMouseDown={() => setShowTeamModal(false)}>
-          <div className="dialog" style={{ width: 'min(100%, 540px)' }} onMouseDown={(e) => e.stopPropagation()}>
-            <div className="dialog-heading" style={{ marginBottom: '14px' }}>
-              <div>
-                <span className="eyebrow" style={{ color: '#4338ca', fontWeight: 800 }}>SRM UNIVERSITY - AP · CAPSTONE PROJECT</span>
-                <h2 style={{ fontSize: '20px', margin: '4px 0 0', color: '#1e1b4b' }}>CareerMatch Project Team</h2>
-                <p style={{ fontSize: '12px', color: '#64748b', margin: '4px 0 0' }}>
-                  Faculty Project Guide: <strong style={{ color: '#312e81' }}>Dr. Trithankar Sengupta</strong>
-                </p>
-              </div>
-              <button className="icon-button" onClick={() => setShowTeamModal(false)}>
-                <X size={18} />
-              </button>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', maxHeight: '380px', overflowY: 'auto', paddingRight: '4px' }}>
-              {[
-                { name: 'Ch. Ganesh', reg: 'AP25110070085', role: 'System Architecture, REST API Gateway & Cloud Deployment' },
-                { name: 'N. Harsha', reg: 'AP25110071045', role: 'Matching Engine & Java 8+ Stream Skill Gap Pipelines' },
-                { name: 'M. Nani', reg: 'AP25110070318', role: 'Relational SQLite Schema Design & JDBC Persistence Layer' },
-                { name: 'Abdul Khadir', reg: 'AP25110071035', role: 'Modern Web Presentation Tier (React 18 / TypeScript SPA)' },
-                { name: 'N. Mitra', reg: 'AP25110070525', role: 'Placement Readiness Scoring Model & Learning Roadmap Synthesizer' },
-                { name: 'K. Chanikya', reg: 'AP25110070312', role: 'Quality Assurance, Integration Test Suite & Exception Architecture' },
-              ].map((member, idx) => (
-                <div key={member.reg} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', background: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                  <div>
-                    <strong style={{ fontSize: '13px', display: 'block', color: '#1e293b' }}>
-                      {idx + 1}. {member.name}
-                    </strong>
-                    <span style={{ fontSize: '11px', color: '#64748b' }}>{member.role}</span>
-                  </div>
-                  <span style={{ fontSize: '11px', fontWeight: 700, padding: '3px 8px', background: '#e0e7ff', color: '#4338ca', borderRadius: '6px', whiteSpace: 'nowrap' }}>
-                    {member.reg}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <div className="dialog-actions" style={{ marginTop: '16px' }}>
-              <button className="primary-button" onClick={() => setShowTeamModal(false)}>
-                Close
-              </button>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );

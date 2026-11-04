@@ -60,42 +60,15 @@ public class ApiServer {
             } catch (Exception ignored) {}
         }).start(port);
 
-        // System Health Check & Academic Project Attribution
+        // System Health Check
         app.get("/api/health", ctx -> {
             Map<String, Object> status = new HashMap<>();
             status.put("status", "UP");
             status.put("platform", "CareerMatch Platform");
-            status.put("institution", "SRM University - AP, Department of Computer Science & Engineering");
-            status.put("guide", "Dr. Trithankar Sengupta");
-            status.put("team", List.of(
-                Map.of("name", "Ch. Ganesh", "regNo", "AP25110070085"),
-                Map.of("name", "N. Harsha", "regNo", "AP25110071045"),
-                Map.of("name", "M. Nani", "regNo", "AP25110070318"),
-                Map.of("name", "Abdul Khadir", "regNo", "AP25110071035"),
-                Map.of("name", "N. Mitra", "regNo", "AP25110070525"),
-                Map.of("name", "K. Chanikya", "regNo", "AP25110070312")
-            ));
             status.put("timestamp", System.currentTimeMillis());
             ctx.json(status);
         });
 
-        // Dedicated Academic Team Metadata Endpoint
-        app.get("/api/team", ctx -> {
-            Map<String, Object> teamInfo = new HashMap<>();
-            teamInfo.put("project", "CareerMatch: Smart Career Planning & Job Recommendation System");
-            teamInfo.put("course", "B.Tech Computer Science and Engineering");
-            teamInfo.put("institution", "SRM University - AP, Andhra Pradesh");
-            teamInfo.put("facultyGuide", "Dr. Trithankar Sengupta");
-            teamInfo.put("members", List.of(
-                Map.of("name", "Ch. Ganesh", "regNo", "AP25110070085", "role", "Architecture, REST API & Deployment"),
-                Map.of("name", "N. Harsha", "regNo", "AP25110071045", "role", "Matching Engine & Stream Pipelines"),
-                Map.of("name", "M. Nani", "regNo", "AP25110070318", "role", "Database Design & JDBC Persistence"),
-                Map.of("name", "Abdul Khadir", "regNo", "AP25110071035", "role", "Frontend React SPA Development"),
-                Map.of("name", "N. Mitra", "regNo", "AP25110070525", "role", "Readiness Scoring & Roadmap Module"),
-                Map.of("name", "K. Chanikya", "regNo", "AP25110070312", "role", "QA, Testing & Exception Architecture")
-            ));
-            ctx.json(teamInfo);
-        });
         // -------------------------------------------------------------
         // Module 1: Authentication & User Registration
         // -------------------------------------------------------------
