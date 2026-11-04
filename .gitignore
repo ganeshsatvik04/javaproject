@@ -9,6 +9,8 @@ node_modules/
 
 # Local databases & logs
 *.log
+*.db
+careermatch.db
 careermatch.db-journal
 careermatch.db-wal
 careermatch.db-shm

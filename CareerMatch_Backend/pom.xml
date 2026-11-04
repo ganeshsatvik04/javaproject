@@ -2,9 +2,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.careermatch</groupId>
-  <artifactId>careermatch-desktop</artifactId>
+  <artifactId>careermatch-backend</artifactId>
   <version>1.0</version>
-  <name>CareerMatch Desktop Platform</name>
+  <name>CareerMatch Backend Platform</name>
   <description>Smart Career Planning and Job Recommendation System</description>
 
   <properties>
