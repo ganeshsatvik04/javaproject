@@ -14,7 +14,6 @@ RUN npm run build
 FROM maven:3.9.6-eclipse-temurin-17 AS backend-build
 WORKDIR /backend
 COPY CareerMatch_Backend/pom.xml .
-RUN mvn dependency:go-offline
 COPY CareerMatch_Backend/src ./src
 
 # Inject built frontend assets into Javalin public classpath
