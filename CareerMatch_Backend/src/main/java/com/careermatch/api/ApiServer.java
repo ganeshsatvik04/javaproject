@@ -12,10 +12,11 @@ import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.bundled.CorsPluginConfig;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Cloud REST API Server for CareerMatch.
- * Bridges all 8 backend business services with Web Frontends (React / Vite / Vercel / Railway).
+ * Bridges all 8 backend business services with Web Frontends (React / Vite / Railway).
  */
 public class ApiServer {
 
@@ -115,7 +116,8 @@ public class ApiServer {
             String skillName = body.get("name");
             String level = body.getOrDefault("level", "Intermediate");
 
-            boolean success = skillService.addSkillToUser(userId, skillName, level);
+            // Correct method: addSkill (not addSkillToUser)
+            boolean success = skillService.addSkill(userId, skillName, level);
             if (success) {
                 ctx.status(HttpStatus.CREATED).json(Map.of("message", "Skill saved successfully"));
             } else {
@@ -126,7 +128,8 @@ public class ApiServer {
         app.delete("/api/users/{id}/skills/{name}", ctx -> {
             int userId = Integer.parseInt(ctx.pathParam("id"));
             String skillName = ctx.pathParam("name");
-            boolean success = skillService.deleteUserSkill(userId, skillName);
+            // Correct method: removeSkill (not deleteUserSkill)
+            boolean success = skillService.removeSkill(userId, skillName);
             ctx.json(Map.of("success", success));
         });
 
@@ -153,7 +156,8 @@ public class ApiServer {
         // Module 4: Company Comparison
         // -------------------------------------------------------------
         app.get("/api/companies", ctx -> {
-            ctx.json(companyService.getAllCompanies());
+            // Correct method: getAllCompanyObjects (not getAllCompanies)
+            ctx.json(companyService.getAllCompanyObjects());
         });
 
         app.get("/api/companies/compare", ctx -> {
@@ -165,7 +169,9 @@ public class ApiServer {
                 ctx.status(HttpStatus.BAD_REQUEST).json(Map.of("error", "Provide comp1 and comp2 query params"));
                 return;
             }
-            List<CompanyComparisonItem> items = comparisonService.getComparison(comp1, comp2, userId);
+            // Correct method: getComparisonProfiles(List<String>, int userId)
+            List<CompanyComparisonItem> items = comparisonService.getComparisonProfiles(
+                    Arrays.asList(comp1, comp2), userId);
             ctx.json(items);
         });
 
@@ -185,7 +191,23 @@ public class ApiServer {
         app.get("/api/users/{id}/roadmap", ctx -> {
             int userId = Integer.parseInt(ctx.pathParam("id"));
             Integer targetJobId = ctx.queryParamAsClass("jobId", Integer.class).getOrDefault(null);
-            List<LearningResource> resources = learningService.getRoadmap(userId, targetJobId);
+
+            // Build missing-skills list to drive the roadmap
+            List<String> missingSkills;
+            if (targetJobId != null) {
+                missingSkills = matchingService.getSkillGap(userId, targetJobId);
+            } else {
+                // No specific job: use all user's missing skills across top jobs
+                Set<String> userSkills = skillService.getUserSkills(userId);
+                missingSkills = jobDAO.getAllJobs().stream()
+                        .flatMap(job -> job.getRequiredSkills().stream())
+                        .filter(s -> !userSkills.contains(s.trim().toLowerCase()))
+                        .distinct()
+                        .collect(Collectors.toList());
+            }
+
+            // Correct method: getRoadmapResources(List<String>, int userId)
+            List<LearningResource> resources = learningService.getRoadmapResources(missingSkills, userId);
             ctx.json(resources);
         });
 
@@ -232,10 +254,11 @@ public class ApiServer {
         // -------------------------------------------------------------
         app.get("/api/admin/metrics", ctx -> {
             Map<String, Object> metrics = new HashMap<>();
-            metrics.put("totalUsers", userDAO.count());
-            metrics.put("totalCompanies", companyService.getAllCompanies().size());
-            metrics.put("totalJobs", jobDAO.getAllJobs().size());
-            metrics.put("totalSkills", skillDAO.getAllSkills().size());
+            // Correct methods: use adminService counts (userDAO.count() does not exist)
+            metrics.put("totalUsers", adminService.getUserCount());
+            metrics.put("totalCompanies", adminService.getCompanyCount());
+            metrics.put("totalJobs", adminService.getJobCount());
+            metrics.put("totalSkills", adminService.getSkillCount());
             ctx.json(metrics);
         });
 
