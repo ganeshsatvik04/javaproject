@@ -54,6 +54,11 @@
           <source>17</source>
           <target>17</target>
           <encoding>UTF-8</encoding>
+          <!-- Exclude Swing/AWT desktop UI — only ApiServer is needed for Railway/Docker -->
+          <excludes>
+            <exclude>com/careermatch/Main.java</exclude>
+            <exclude>com/careermatch/ui/**</exclude>
+          </excludes>
         </configuration>
       </plugin>
 

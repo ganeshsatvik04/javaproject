@@ -26,7 +26,7 @@ RUN mvn clean package -DskipTests
 # =============================================================
 # Stage 3: Lightweight Production JRE Runtime
 # =============================================================
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
 # Copy the standalone executable fat JAR
