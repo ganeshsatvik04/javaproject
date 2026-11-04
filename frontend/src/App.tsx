@@ -188,7 +188,7 @@ function App() {
         </div>
         <div className="workspace-label">WORKSPACE</div>
         <nav className="main-nav">
-          {navItems.map(({ label, icon: Icon, admin }) => (
+          {navItems.filter(({ admin }) => !admin || currentUser?.role === 'ADMIN').map(({ label, icon: Icon, admin }) => (
             <button
               key={label}
               className={`nav-item ${activeView === label ? 'active' : ''} ${admin ? 'admin-nav' : ''}`}

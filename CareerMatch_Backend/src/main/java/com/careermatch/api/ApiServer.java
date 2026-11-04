@@ -59,6 +59,22 @@ public class ApiServer {
             } catch (Exception ignored) {}
         }).start(port);
 
+        // SPA fallback: serve index.html for all non-API GET requests
+        // so React client-side navigation works on page refresh or direct URL access.
+        app.get("/*", ctx -> {
+            String path = ctx.path();
+            if (!path.startsWith("/api")) {
+                try {
+                    java.io.InputStream indexStream = ApiServer.class
+                            .getResourceAsStream("/public/index.html");
+                    if (indexStream != null) {
+                        ctx.contentType("text/html;charset=utf-8")
+                           .result(indexStream);
+                    }
+                } catch (Exception ignored) {}
+            }
+        });
+
         // System Health Check
         app.get("/api/health", ctx -> {
             Map<String, Object> status = new HashMap<>();
